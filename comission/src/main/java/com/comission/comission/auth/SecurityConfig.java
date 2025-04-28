@@ -1,6 +1,5 @@
-package com.comission.comission.config;
+package com.comission.comission.auth;
 
-import com.comission.comission.filter.JWTFilter;
 import com.comission.comission.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +11,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,7 +35,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         return http
-                .csrf(customizer ->customizer.disable())
+                .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request ->
                 request.requestMatchers("/login", "/register","/auth/**").permitAll().anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

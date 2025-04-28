@@ -1,8 +1,6 @@
-package com.comission.comission.controller;
+package com.comission.comission.auth;
 
 import com.comission.comission.model.User;
-import com.comission.comission.service.AuthServiceImpl;
-import com.comission.comission.service.JWTService;
 import com.comission.comission.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,19 +32,19 @@ public class AuthController {
         this.userServiceImpl=userServiceImpl;
     }
 
-    @PostMapping("auth/login")
+    @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody User user)
     {
         return authServiceImpl.login(user);
     }
 
-    @PostMapping("auth/register")
+    @PostMapping("register")
     public User register(@RequestBody User user)
     {
         return authServiceImpl.register(user);
     }
 
-    @PostMapping("auth/refresh-token")
+    @PostMapping("refresh-token")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response)
     {
         String authHeader = request.getHeader("Authorization");

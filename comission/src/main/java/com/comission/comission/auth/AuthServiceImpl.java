@@ -1,4 +1,4 @@
-package com.comission.comission.service;
+package com.comission.comission.auth;
 
 import com.comission.comission.model.User;
 import com.comission.comission.repository.UserRepository;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepo;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);

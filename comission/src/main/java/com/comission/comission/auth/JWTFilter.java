@@ -1,6 +1,5 @@
-package com.comission.comission.filter;
+package com.comission.comission.auth;
 
-import com.comission.comission.service.JWTService;
 import com.comission.comission.service.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,4 +1,4 @@
-package com.comission.comission.service;
+package com.comission.comission.auth;
 
 import com.comission.comission.model.User;
 import org.springframework.http.ResponseEntity;
