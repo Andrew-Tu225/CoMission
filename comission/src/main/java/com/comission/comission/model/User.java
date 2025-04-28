@@ -2,16 +2,20 @@ package com.comission.comission.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name="users")
 @Data
+@NoArgsConstructor
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,15 +23,27 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     @Column(unique = true)
-    private String userName;
+    private String username;
+
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Collection<Role> roles = new ArrayList<>();
+
     @Column(unique = true)
     private String email;
     private String password;
 
-    private String verificationCode;
-    private LocalDateTime expiredAt;
 
-    public User(String firstName,String lastName,String email,String password)
+
+    public User(String firstName,String lastName, String username, String email,String password)
+    {
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.username=username;
+        this.email=email;
+        this.password=password;
+    }
+
+    public User(String firstName,String lastName, String email,String password)
     {
         this.firstName=firstName;
         this.lastName=lastName;
@@ -35,19 +51,18 @@ public class User implements UserDetails {
         this.password=password;
     }
 
-    public User()
-    {
-
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
+        return authorities;
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
