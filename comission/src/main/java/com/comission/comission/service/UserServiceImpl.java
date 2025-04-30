@@ -1,5 +1,6 @@
 package com.comission.comission.service;
 
+import com.comission.comission.model.Project;
 import com.comission.comission.model.User;
 import com.comission.comission.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,10 @@ public class UserServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("username is not found");
         }
         return user.get();
+    }
+
+    public void addProject(User user, Project project)
+    {
+        user.getProjects().add(project);
     }
 }
