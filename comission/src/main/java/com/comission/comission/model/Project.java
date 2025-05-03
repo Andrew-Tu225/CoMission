@@ -1,5 +1,6 @@
 package com.comission.comission.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,14 @@ public class Project implements Serializable {
     @ManyToMany(mappedBy = "projects")
     private List<User> members = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "project_tag",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @JsonIgnore
+    private List<Tag> tags = new ArrayList<>();
     private LocalDate endDate = null;
     private boolean complete = false;
 

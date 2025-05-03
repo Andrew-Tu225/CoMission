@@ -2,6 +2,7 @@ package com.comission.comission.controller;
 
 import com.comission.comission.DTO.ProjectCreateRequest;
 import com.comission.comission.model.Project;
+import com.comission.comission.model.Tag;
 import com.comission.comission.model.User;
 import com.comission.comission.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("project")
 public class ProjectController {
     private final ProjectService projectService;
     @Autowired
@@ -22,7 +26,7 @@ public class ProjectController {
         this.projectService=projectService;
     }
 
-    @PostMapping("/project/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createProject(@RequestBody ProjectCreateRequest projectCreateRequest)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,9 +40,48 @@ public class ProjectController {
 
     }
 
-    @GetMapping("/projects")
+    @GetMapping("/search")
     public List<Project> searchProject(@RequestParam("query") String query)
     {
         return projectService.getProjectFromLikeQuery(query);
     }
+
+    @GetMapping("/{projectId}")
+    public Project getProject(@PathVariable("projectId") long projectId)
+    {
+        Optional<Project> project = projectService.getProject(projectId);
+        if(project.isEmpty())
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "project not found");
+        }
+        else
+        {
+            return project.get();
+        }
+    }
+
+    @PostMapping("/create-tag")
+    public ResponseEntity<?> createTag(@RequestBody String tagName)
+    {
+        return projectService.createTag(tagName);
+    }
+
+    @PostMapping("/{projectId}/add-tags")
+    public ResponseEntity<?> addTags(
+            @PathVariable("projectId") long projectId,
+            @RequestBody List<Tag> tags)
+    {
+        Optional<Project> project = projectService.getProject(projectId);
+        if(project.isPresent())
+        {
+            return projectService.addTags(project.get(),tags);
+        }
+        else
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"project is not found");
+        }
+
+    }
+
+
 }

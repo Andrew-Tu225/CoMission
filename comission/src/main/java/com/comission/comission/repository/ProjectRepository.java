@@ -32,6 +32,8 @@ public interface ProjectRepository extends JpaRepository<Project,Long> {
         return new ArrayList<>(results);
     }
 
+    Optional<Project> findById(long id);
+
     Set<Project> findByTitleContainingIgnoreCase(String word);
 
 
