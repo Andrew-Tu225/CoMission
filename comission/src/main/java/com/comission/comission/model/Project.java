@@ -1,5 +1,8 @@
 package com.comission.comission.model;
 
+import com.comission.comission.model.resource.ProjectFilesResource;
+import com.comission.comission.model.resource.ProjectLinksResource;
+import com.comission.comission.model.resource.ProjectResource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -32,6 +35,15 @@ public class Project implements Serializable {
     )
     @JsonIgnore
     private List<Tag> tags = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "files_resource_id")
+    private ProjectFilesResource filesResource;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "links_resource_id")
+    private ProjectLinksResource linksResource;
+
     private LocalDate endDate = null;
     private boolean complete = false;
 
