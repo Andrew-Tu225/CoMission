@@ -1,8 +1,10 @@
 package com.comission.comission.auth;
 
+import com.comission.comission.event.UserCreatedEvent;
 import com.comission.comission.model.User;
 import com.comission.comission.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,19 +24,24 @@ public class AuthServiceImpl implements AuthService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepo, AuthenticationManager authManager, JWTService jwtService)
+    public AuthServiceImpl(
+            UserRepository userRepo, AuthenticationManager authManager, JWTService jwtService, ApplicationEventPublisher eventPublisher)
     {
         this.userRepo=userRepo;
         this.authManager=authManager;
         this.jwtService=jwtService;
+        this.eventPublisher=eventPublisher;
     }
 
     @Override
     public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        User savedUser = userRepo.save(user);
+        eventPublisher.publishEvent(new UserCreatedEvent(savedUser));
+        return savedUser;
     }
 
     @Override
