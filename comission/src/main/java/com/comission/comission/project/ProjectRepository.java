@@ -1,7 +1,7 @@
 package com.comission.comission.repository;
 
-import com.comission.comission.model.Project;
-import com.comission.comission.model.User;
+import com.comission.comission.project.Project;
+import com.comission.comission.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

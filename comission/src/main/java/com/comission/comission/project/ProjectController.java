@@ -1,9 +1,9 @@
 package com.comission.comission.controller;
 
 import com.comission.comission.DTO.ProjectCreateRequest;
-import com.comission.comission.model.Project;
+import com.comission.comission.project.Project;
 import com.comission.comission.model.Tag;
-import com.comission.comission.model.User;
+import com.comission.comission.user.User;
 import com.comission.comission.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
