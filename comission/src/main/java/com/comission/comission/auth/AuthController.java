@@ -1,7 +1,7 @@
 package com.comission.comission.auth;
 
-import com.comission.comission.model.User;
-import com.comission.comission.service.UserServiceImpl;
+import com.comission.comission.user.User;
+import com.comission.comission.user.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

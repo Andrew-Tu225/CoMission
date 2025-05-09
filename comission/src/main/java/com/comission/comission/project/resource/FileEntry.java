@@ -1,4 +1,4 @@
-package com.comission.comission.model.resource;
+package com.comission.comission.project.resource;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

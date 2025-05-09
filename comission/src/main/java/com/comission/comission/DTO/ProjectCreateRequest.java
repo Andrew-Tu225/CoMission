@@ -1,6 +1,6 @@
 package com.comission.comission.DTO;
 
-import com.comission.comission.model.Project;
+import com.comission.comission.project.Project;
 import lombok.Data;
 
 import java.util.List;

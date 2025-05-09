@@ -1,5 +1,6 @@
-package com.comission.comission.model;
+package com.comission.comission.user;
 
+import com.comission.comission.project.Project;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;

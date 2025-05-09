@@ -1,6 +1,6 @@
 package com.comission.comission.auth;
 
-import com.comission.comission.service.UserServiceImpl;
+import com.comission.comission.user.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

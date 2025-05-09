@@ -1,6 +1,5 @@
-package com.comission.comission.model;
+package com.comission.comission.project;
 
-import com.comission.comission.project.Project;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

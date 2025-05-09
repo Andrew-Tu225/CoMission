@@ -1,6 +1,5 @@
-package com.comission.comission.repository;
+package com.comission.comission.project;
 
-import com.comission.comission.project.Project;
 import com.comission.comission.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,6 @@
-package com.comission.comission.model.resource;
+package com.comission.comission.project.resource;
 
-import com.comission.comission.model.Project;
+import com.comission.comission.project.Project;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

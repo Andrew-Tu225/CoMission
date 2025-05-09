@@ -1,6 +1,5 @@
-package com.comission.comission.repository;
+package com.comission.comission.project;
 
-import com.comission.comission.model.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

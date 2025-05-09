@@ -1,6 +1,6 @@
 package com.comission.comission.auth;
 
-import com.comission.comission.model.User;
+import com.comission.comission.user.User;
 import org.springframework.http.ResponseEntity;
 
 

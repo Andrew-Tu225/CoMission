@@ -1,8 +1,8 @@
-package com.comission.comission.model;
+package com.comission.comission.project;
 
-import com.comission.comission.model.resource.ProjectFilesResource;
-import com.comission.comission.model.resource.ProjectLinksResource;
-import com.comission.comission.model.resource.ProjectResource;
+import com.comission.comission.project.resource.ProjectFilesResource;
+import com.comission.comission.project.resource.ProjectLinksResource;
+import com.comission.comission.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,8 +1,8 @@
-package com.comission.comission.event;
+package com.comission.comission.user.profile.event;
 
-import com.comission.comission.model.User;
-import com.comission.comission.model.UserProfile;
-import com.comission.comission.repository.UserProfileRepository;
+import com.comission.comission.user.User;
+import com.comission.comission.user.profile.UserProfile;
+import com.comission.comission.user.profile.UserProfileRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

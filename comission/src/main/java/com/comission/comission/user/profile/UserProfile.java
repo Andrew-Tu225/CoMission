@@ -1,5 +1,6 @@
-package com.comission.comission.model;
+package com.comission.comission.user.profile;
 
+import com.comission.comission.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 

@@ -1,10 +1,7 @@
-package com.comission.comission.service;
+package com.comission.comission.project;
 
-import com.comission.comission.project.Project;
-import com.comission.comission.model.Tag;
 import com.comission.comission.user.User;
-import com.comission.comission.repository.ProjectRepository;
-import com.comission.comission.repository.TagRepository;
+import com.comission.comission.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

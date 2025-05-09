@@ -1,6 +1,6 @@
 package com.comission.comission.auth;
 
-import com.comission.comission.service.UserServiceImpl;
+import com.comission.comission.user.UserServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

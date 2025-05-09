@@ -1,8 +1,8 @@
 package com.comission.comission.auth;
 
-import com.comission.comission.event.UserCreatedEvent;
-import com.comission.comission.model.User;
-import com.comission.comission.repository.UserRepository;
+import com.comission.comission.user.profile.event.UserCreatedEvent;
+import com.comission.comission.user.User;
+import com.comission.comission.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;

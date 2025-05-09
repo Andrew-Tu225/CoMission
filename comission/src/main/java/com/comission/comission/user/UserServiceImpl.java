@@ -1,8 +1,6 @@
-package com.comission.comission.service;
+package com.comission.comission.user;
 
 import com.comission.comission.project.Project;
-import com.comission.comission.user.User;
-import com.comission.comission.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

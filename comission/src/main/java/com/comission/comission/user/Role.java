@@ -1,4 +1,4 @@
-package com.comission.comission.model;
+package com.comission.comission.user;
 
 import jakarta.persistence.*;
 import lombok.Data;

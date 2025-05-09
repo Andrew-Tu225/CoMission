@@ -1,6 +1,6 @@
-package com.comission.comission.event;
+package com.comission.comission.user.profile.event;
 
-import com.comission.comission.model.User;
+import com.comission.comission.user.User;
 import org.springframework.context.ApplicationEvent;
 
 public class UserCreatedEvent extends ApplicationEvent {
