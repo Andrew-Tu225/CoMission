@@ -21,27 +21,32 @@ import java.util.Map;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepo;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+    private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public AuthServiceImpl(
-            UserRepository userRepo, AuthenticationManager authManager, JWTService jwtService, ApplicationEventPublisher eventPublisher)
+            UserRepository userRepo, AuthenticationManager authManager, JWTService jwtService, ApplicationEventPublisher eventPublisher, BCryptPasswordEncoder passwordEncoder)
     {
         this.userRepo=userRepo;
         this.authManager=authManager;
         this.jwtService=jwtService;
         this.eventPublisher=eventPublisher;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepo.save(user);
-        eventPublisher.publishEvent(new UserCreatedEvent(savedUser));
+        publishUserCreatedEvent(savedUser);
         return savedUser;
+    }
+
+    protected void publishUserCreatedEvent(User user) {
+        eventPublisher.publishEvent(new UserCreatedEvent(user));
     }
 
     @Override
