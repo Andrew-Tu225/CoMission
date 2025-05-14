@@ -43,7 +43,8 @@ public class JWTService {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles",roles);
-
+        //one hour
+        int tokenExpirationMs = 3600000;
         return Jwts.builder()
                 .header()
                 .add("typ","JWT")
@@ -52,7 +53,7 @@ public class JWTService {
                 .add(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+3600000))
+                .expiration(new Date(System.currentTimeMillis()+ tokenExpirationMs))
                 .and()
                 .signWith(getKey())
                 .compact();
@@ -61,7 +62,8 @@ public class JWTService {
     public String generateRefreshToken(String username)
     {
         Map<String, Object> claims = new HashMap<>();
-
+        //one month
+        long refreshTokenExpirationMs = 2592000000L;
         return Jwts.builder()
                 .header()
                 .add("typ","JWT")
@@ -70,7 +72,7 @@ public class JWTService {
                 .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+2592000000L))
+                .expiration(new Date(System.currentTimeMillis()+ refreshTokenExpirationMs))
                 .and()
                 .signWith(getKey())
                 .compact();
