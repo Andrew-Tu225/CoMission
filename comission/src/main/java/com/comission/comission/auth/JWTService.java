@@ -1,5 +1,6 @@
 package com.comission.comission.auth;
 
+import com.comission.comission.common.AppUserService;
 import com.comission.comission.user.UserServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,15 +20,15 @@ import java.util.function.Function;
 public class JWTService {
 
     private final String secretKey;
-    private final UserServiceImpl userServiceImpl;
+    private final AppUserService appUserService;
 
-    public JWTService(UserServiceImpl userServiceImpl)
+    public JWTService(AppUserService appUserService)
     {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGenerator.generateKey();
             secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-            this.userServiceImpl=userServiceImpl;
+            this.appUserService=appUserService;
 
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
@@ -36,7 +37,7 @@ public class JWTService {
 
     public String generateToken(String username)
     {
-        UserDetails user = userServiceImpl.loadUserByUsername(username);
+        UserDetails user = appUserService.loadUserByUsername(username);
         List<String> roles = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();

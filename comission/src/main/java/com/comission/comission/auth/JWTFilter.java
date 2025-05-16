@@ -1,5 +1,6 @@
 package com.comission.comission.auth;
 
+import com.comission.comission.common.AppUserService;
 import com.comission.comission.user.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,13 +20,13 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
-    private final UserServiceImpl userService;
+    private final AppUserService appUserService;
 
     @Autowired
-    public JWTFilter(JWTService jwtService, UserServiceImpl userService)
+    public JWTFilter(JWTService jwtService, AppUserService appUserService)
     {
         this.jwtService = jwtService;
-        this.userService=userService;
+        this.appUserService=appUserService;
     }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -45,7 +46,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null)
         {
-            UserDetails user = userService.loadUserByUsername(username);
+            UserDetails user = appUserService.loadUserByUsername(username);
             if(jwtService.validateToken(token, user)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());

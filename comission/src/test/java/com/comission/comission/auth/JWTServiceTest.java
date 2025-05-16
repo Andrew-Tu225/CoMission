@@ -1,5 +1,6 @@
 package com.comission.comission.auth;
 
+import com.comission.comission.common.AppUserService;
 import com.comission.comission.user.Role;
 import com.comission.comission.user.User;
 import com.comission.comission.user.UserServiceImpl;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class JWTServiceTest {
     @Mock
-    private UserServiceImpl userServiceImpl;
+    private AppUserService appUserService;
     @InjectMocks
     private JWTService jwtService;
     private User testUser;
@@ -40,7 +41,7 @@ class JWTServiceTest {
 
     @Test
     void checkUsernameMatchedInGenerateTokenTest() {
-        Mockito.when(userServiceImpl.loadUserByUsername(testUser.getUsername())).thenReturn(testUser);
+        Mockito.when(appUserService.loadUserByUsername(testUser.getUsername())).thenReturn(testUser);
         String jwtToken = jwtService.generateToken(testUser.getUsername());
 
         Assertions.assertFalse(jwtToken.isBlank());

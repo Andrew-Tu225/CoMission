@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl {
 
     private final UserRepository userRepository;
 
@@ -18,16 +18,6 @@ public class UserServiceImpl implements UserDetailsService {
     public UserServiceImpl(UserRepository userRepository)
     {
         this.userRepository=userRepository;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
-        if(user.isEmpty())
-        {
-            throw new UsernameNotFoundException("username is not found");
-        }
-        return user.get();
     }
 
     public void addProject(User user, Project project)
