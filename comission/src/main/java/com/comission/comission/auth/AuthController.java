@@ -1,5 +1,8 @@
 package com.comission.comission.auth;
 
+import com.comission.comission.DTO.RegisterRequest;
+import com.comission.comission.common.AppUser;
+import com.comission.comission.common.AppUserService;
 import com.comission.comission.user.User;
 import com.comission.comission.user.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,26 +25,26 @@ import java.util.Map;
 public class AuthController {
     private final AuthServiceImpl authServiceImpl;
     private final JWTService jwtService;
-    private final UserServiceImpl userServiceImpl;
+    private final AppUserService appUserService;
 
     @Autowired
-    public AuthController(AuthServiceImpl authServiceImpl,JWTService jwtService, UserServiceImpl userServiceImpl)
+    public AuthController(AuthServiceImpl authServiceImpl,JWTService jwtService, AppUserService appUserService)
     {
         this.authServiceImpl=authServiceImpl;
         this.jwtService = jwtService;
-        this.userServiceImpl=userServiceImpl;
+        this.appUserService=appUserService;
     }
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody User user)
+    public ResponseEntity<?> login(@RequestBody AppUser appUser)
     {
-        return authServiceImpl.login(user);
+        return authServiceImpl.login(appUser);
     }
 
     @PostMapping("register")
-    public User register(@RequestBody User user)
+    public AppUser register(@RequestBody RegisterRequest request)
     {
-        return authServiceImpl.register(user);
+        return authServiceImpl.register(request);
     }
 
     @PostMapping("refresh-token")
@@ -55,7 +58,7 @@ public class AuthController {
             try{
                 refreshToken = authHeader.substring(7);
                 username = jwtService.extractUsername(refreshToken);
-                UserDetails user = userServiceImpl.loadUserByUsername(username);
+                UserDetails user = appUserService.loadUserByUsername(username);
 
                 if(jwtService.validateToken(refreshToken, user)) {
                     String accessToken = jwtService.generateToken(user.getUsername());

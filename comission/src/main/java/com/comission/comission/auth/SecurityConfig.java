@@ -1,5 +1,6 @@
 package com.comission.comission.auth;
 
+import com.comission.comission.common.AppUserService;
 import com.comission.comission.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,13 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserServiceImpl userServiceImpl;
+    private final AppUserService appUserService;
     private final JWTFilter jwtFilter;
 
     @Autowired
-    public SecurityConfig(UserServiceImpl userServiceImpl, JWTFilter jwtFilter)
+    public SecurityConfig(AppUserService appUserService, JWTFilter jwtFilter)
     {
-        this.userServiceImpl = userServiceImpl;
+        this.appUserService = appUserService;
         this.jwtFilter = jwtFilter;
     }
 
@@ -54,7 +55,7 @@ public class SecurityConfig {
     {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
-        provider.setUserDetailsService(userServiceImpl);
+        provider.setUserDetailsService(appUserService);
         return provider;
     }
 

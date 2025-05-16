@@ -1,8 +1,12 @@
 package com.comission.comission.auth;
 
+import com.comission.comission.DTO.RegisterRequest;
+import com.comission.comission.client.Client;
+import com.comission.comission.client.profile.event.ClientCreatedEvent;
+import com.comission.comission.common.AppUser;
+import com.comission.comission.common.AppUserRepository;
 import com.comission.comission.user.profile.event.UserCreatedEvent;
 import com.comission.comission.user.User;
-import com.comission.comission.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -19,8 +23,7 @@ import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-
-    private final UserRepository userRepo;
+    private final AppUserRepository appUserRepo;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
@@ -28,9 +31,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     public AuthServiceImpl(
-            UserRepository userRepo, AuthenticationManager authManager, JWTService jwtService, ApplicationEventPublisher eventPublisher, BCryptPasswordEncoder passwordEncoder)
+            AppUserRepository appUserRepo, AuthenticationManager authManager, JWTService jwtService, ApplicationEventPublisher eventPublisher, BCryptPasswordEncoder passwordEncoder)
     {
-        this.userRepo=userRepo;
+        this.appUserRepo=appUserRepo;
         this.authManager=authManager;
         this.jwtService=jwtService;
         this.eventPublisher=eventPublisher;
@@ -38,25 +41,61 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepo.save(user);
-        publishUserCreatedEvent(savedUser);
-        return savedUser;
+    public AppUser register(RegisterRequest request) {
+        String registerType = request.getRegisterType().toUpperCase();
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
+        AppUser newUser = null;
+
+        switch(registerType)
+        {
+            case "CLIENT":
+                Client client = new Client();
+                client.setUsername(request.getUsername());
+                client.setEmail(request.getEmail());
+                client.setPassword(encodedPassword);
+                client.setClient(true);
+
+                newUser = client;
+                break;
+
+            case "USER":
+                User user = new User();
+                user.setUsername(request.getUsername());
+                user.setEmail(request.getEmail());
+                user.setPassword(encodedPassword);
+                user.setUser(true);
+                newUser=user;
+
+            default:
+                throw new IllegalArgumentException("Invalid register type: " + registerType);
+        }
+
+        publishUserCreatedEvent(newUser);
+        appUserRepo.save(newUser);
+        return newUser;
+
     }
 
-    protected void publishUserCreatedEvent(User user) {
-        eventPublisher.publishEvent(new UserCreatedEvent(user));
+    protected void publishUserCreatedEvent(AppUser newUser) {
+        if(newUser.isUser())
+        {
+            eventPublisher.publishEvent(new UserCreatedEvent((User)newUser));
+        }
+        else if(newUser.isClient())
+        {
+            eventPublisher.publishEvent(new ClientCreatedEvent((Client)newUser));
+        }
     }
 
     @Override
-    public ResponseEntity<?> login(User user) {
+    public ResponseEntity<?> login(AppUser appUser) {
         try{
             Authentication authentication = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+                    new UsernamePasswordAuthenticationToken(appUser.getUsername(),appUser.getPassword()));
 
-            String accessToken = jwtService.generateToken(user.getUsername());
-            String refreshToken = jwtService.generateRefreshToken(user.getUsername());
+            String accessToken = jwtService.generateToken(appUser.getUsername());
+            String refreshToken = jwtService.generateRefreshToken(appUser.getUsername());
 
             Map<String, Object> tokens = new HashMap<>();
             tokens.put("accessToken", accessToken);
