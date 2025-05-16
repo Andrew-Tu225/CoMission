@@ -14,13 +14,11 @@ import java.util.*;
 public class ProjectService {
 
     private final ProjectRepository projectRepo;
-    private final UserServiceImpl userServiceImpl;
     private final TagRepository tagRepo;
     @Autowired
-    public ProjectService(ProjectRepository projectRepo, UserServiceImpl userServiceImpl, TagRepository tagRepo)
+    public ProjectService(ProjectRepository projectRepo, TagRepository tagRepo)
     {
         this.projectRepo=projectRepo;
-        this.userServiceImpl=userServiceImpl;
         this.tagRepo=tagRepo;
     }
 
@@ -34,19 +32,19 @@ public class ProjectService {
         return projectRepo.getProjectByLikeQuery(query);
     }
 
-    public Project createProject(Project project, List<String> membersUsername, User creator)
-    {
-        List<User> members = new ArrayList<>();
-        members.add(creator);
-        for(String username:membersUsername)
-        {
-            User user = (User)userServiceImpl.loadUserByUsername(username);
-            userServiceImpl.addProject(user, project);
-            members.add(user);
-        }
-        project.setMembers(members);
-        return projectRepo.save(project);
-    }
+//    public Project createProject(Project project, List<String> membersUsername, User creator)
+//    {
+//        List<User> members = new ArrayList<>();
+//        members.add(creator);
+//        for(String username:membersUsername)
+//        {
+//            User user = (User)userServiceImpl.loadUserByUsername(username);
+//            userServiceImpl.addProject(user, project);
+//            members.add(user);
+//        }
+//        project.setMembers(members);
+//        return projectRepo.save(project);
+//    }
 
     public Optional<Project> getProject(long projectId)
     {

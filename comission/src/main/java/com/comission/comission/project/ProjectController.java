@@ -23,19 +23,19 @@ public class ProjectController {
         this.projectService=projectService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createProject(@RequestBody ProjectCreateRequest projectCreateRequest)
-    {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User creator = (User) authentication.getPrincipal();
-        Project createdProject = projectService.createProject(
-                projectCreateRequest.getProject(),
-                projectCreateRequest.getMembersUsername(),
-                creator);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
-
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createProject(@RequestBody ProjectCreateRequest projectCreateRequest)
+//    {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User creator = (User) authentication.getPrincipal();
+//        Project createdProject = projectService.createProject(
+//                projectCreateRequest.getProject(),
+//                projectCreateRequest.getMembersUsername(),
+//                creator);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdProject);
+//
+//    }
 
     @GetMapping("/search")
     public List<Project> searchProject(@RequestParam("query") String query)
