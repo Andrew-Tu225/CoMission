@@ -10,17 +10,17 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name="tags")
+@Table(name="skills")
 @NoArgsConstructor
-public class Tag implements Serializable {
+public class Skill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "skills")
     private Set<Project> relatedProjects = new HashSet<>();
 
-    public Tag(String name)
+    public Skill(String name)
     {
         this.name = "#"+name;
     }
