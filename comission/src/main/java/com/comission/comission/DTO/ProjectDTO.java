@@ -1,12 +1,14 @@
 package com.comission.comission.DTO;
 
 import com.comission.comission.project.Project;
-import com.comission.comission.project.Skill;
+import com.comission.comission.skill.Skill;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class ProjectDTO {
     private long id;
     private String title;

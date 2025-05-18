@@ -1,13 +1,18 @@
 package com.comission.comission.project;
 
 import com.comission.comission.DTO.ProjectDTO;
+import com.comission.comission.DTO.SkillDTO;
 import com.comission.comission.client.Client;
 import com.comission.comission.common.AppUser;
+import com.comission.comission.skill.Skill;
+import com.comission.comission.skill.SkillRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -15,10 +20,12 @@ import java.util.*;
 public class ProjectService {
 
     private final ProjectRepository projectRepo;
+    private final SkillRepository skillRepo;
     @Autowired
-    public ProjectService(ProjectRepository projectRepo)
+    public ProjectService(ProjectRepository projectRepo, SkillRepository skillRepo)
     {
         this.projectRepo=projectRepo;
+        this.skillRepo=skillRepo;
     }
 
     public List<ProjectDTO> getProjectFromLikeQuery(String query)
@@ -32,7 +39,6 @@ public class ProjectService {
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client projectOwner = (Client) authentication.getPrincipal();
-        System.out.println(projectOwner.getUsername());
         project.setOwner(projectOwner);
         return projectRepo.save(project);
     }
@@ -68,30 +74,18 @@ public class ProjectService {
     {
         return projectRepo.save(project);
     }
-//    @Transactional
-//    public ResponseEntity<?> addSkills(Project project, List<Skill> skills)
-//    {
-//        Set<Skill> currentSkills = new HashSet<>(project.getSkills());
-//        currentSkills.addAll(skills);
-//        for(Skill skill : skills)
-//        {
-//            skill.getRelatedProjects().add(project);
-//        }
-//        project.setSkills(new ArrayList<>(currentSkills));
-//        return ResponseEntity.ok("skills added successfully");
-//    }
-//
-//    public ResponseEntity<?> createSkill(String skillName)
-//    {
-//        if(skillRepo.getByName(skillName).isEmpty())
-//        {
-//            Skill newSkill = new Skill(skillName);
-//            skillRepo.save(newSkill);
-//            return ResponseEntity.ok("skill creates successfully");
-//        }
-//        else
-//        {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body("skill name already exist");
-//        }
-//    }
+
+    @Transactional
+    public ResponseEntity<?> addSkills(Project project, List<SkillDTO> skills)
+    {
+        Set<Skill> currentSkills = new HashSet<>(project.getSkills());
+        for(SkillDTO skillDTO : skills)
+        {
+            Skill skill = skillRepo.findById(skillDTO.getId());
+            skill.getRelatedProjects().add(project);
+            currentSkills.add(skill);
+        }
+        project.setSkills(new ArrayList<>(currentSkills));
+        return ResponseEntity.ok("skills added successfully");
+    }
 }
