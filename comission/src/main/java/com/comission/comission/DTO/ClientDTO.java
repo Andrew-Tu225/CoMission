@@ -2,8 +2,10 @@ package com.comission.comission.DTO;
 
 import com.comission.comission.client.Client;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ClientDTO {
     private long id;
     private String username;

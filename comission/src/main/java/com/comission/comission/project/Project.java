@@ -1,6 +1,7 @@
 package com.comission.comission.project;
 
 import com.comission.comission.client.Client;
+import com.comission.comission.skill.Skill;
 import com.comission.comission.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

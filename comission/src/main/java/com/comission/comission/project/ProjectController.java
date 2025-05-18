@@ -1,6 +1,7 @@
 package com.comission.comission.project;
 
 import com.comission.comission.DTO.ProjectDTO;
+import com.comission.comission.DTO.SkillDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,28 +68,20 @@ public class ProjectController {
         }
     }
 
-//    @PostMapping("/create-skill")
-//    public ResponseEntity<?> createSkill(@RequestBody String skillName)
-//    {
-//        return projectService.createSkill(skillName);
-//    }
-//
-//    @PostMapping("/{projectId}/add-skills")
-//    public ResponseEntity<?> addSkills(
-//            @PathVariable("projectId") long projectId,
-//            @RequestBody List<Skill> skills)
-//    {
-//        Optional<Project> project = projectService.getProject(projectId);
-//        if(project.isPresent())
-//        {
-//            return projectService.addSkills(project.get(), skills);
-//        }
-//        else
-//        {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"project is not found");
-//        }
-//
-//    }
+
+    @PostMapping("/{projectId}/add-skills")
+    public ResponseEntity<?> addSkills(
+            @PathVariable("projectId") long projectId,
+            @RequestBody List<SkillDTO> skills)
+    {
+        try{
+            Project project = projectService.getProject(projectId);
+            return projectService.addSkills(project, skills);
+        }
+        catch(EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
 
 }
