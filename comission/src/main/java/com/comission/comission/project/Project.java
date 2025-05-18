@@ -1,7 +1,6 @@
 package com.comission.comission.project;
 
-import com.comission.comission.project.resource.ProjectFilesResource;
-import com.comission.comission.project.resource.ProjectLinksResource;
+import com.comission.comission.client.Client;
 import com.comission.comission.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -23,26 +22,20 @@ public class Project implements Serializable {
     private long id;
     private String title;
     private String description;
-
-    @ManyToMany(mappedBy = "projects")
-    private List<User> members = new ArrayList<>();
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "project_tag",
+            name = "project_skills",
             joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     @JsonIgnore
-    private List<Tag> tags = new ArrayList<>();
+    private List<Skill> skills = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "files_resource_id")
-    private ProjectFilesResource filesResource;
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "links_resource_id")
-    private ProjectLinksResource linksResource;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client owner;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User freelancer;
 
     private LocalDate endDate = null;
     private boolean complete = false;
