@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface TagRepository extends JpaRepository<Tag, Long> {
-    Optional<Tag> getByName(String name);
+public interface SkillRepository extends JpaRepository<Skill, Long> {
+    Optional<Skill> getByName(String name);
 }

@@ -1,12 +1,13 @@
 package com.comission.comission.project;
 
-import com.comission.comission.user.User;
-import com.comission.comission.user.UserServiceImpl;
+import com.comission.comission.DTO.ProjectDTO;
+import com.comission.comission.client.Client;
+import com.comission.comission.common.AppUser;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -14,67 +15,83 @@ import java.util.*;
 public class ProjectService {
 
     private final ProjectRepository projectRepo;
-    private final TagRepository tagRepo;
     @Autowired
-    public ProjectService(ProjectRepository projectRepo, TagRepository tagRepo)
+    public ProjectService(ProjectRepository projectRepo)
     {
         this.projectRepo=projectRepo;
-        this.tagRepo=tagRepo;
     }
 
-    public List<User> getAllProjectUsers(Long projectId)
+    public List<ProjectDTO> getProjectFromLikeQuery(String query)
     {
-        return projectRepo.getProjectUsers(projectId);
+        List<Project> projects = projectRepo.getProjectByLikeQuery(query);
+        List<ProjectDTO> results = projects.stream().map(ProjectDTO::new).toList();
+        return results;
     }
 
-    public List<Project> getProjectFromLikeQuery(String query)
+    public Project createProject(Project project)
     {
-        return projectRepo.getProjectByLikeQuery(query);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client projectOwner = (Client) authentication.getPrincipal();
+        System.out.println(projectOwner.getUsername());
+        project.setOwner(projectOwner);
+        return projectRepo.save(project);
     }
 
-//    public Project createProject(Project project, List<String> membersUsername, User creator)
-//    {
-//        List<User> members = new ArrayList<>();
-//        members.add(creator);
-//        for(String username:membersUsername)
-//        {
-//            User user = (User)userServiceImpl.loadUserByUsername(username);
-//            userServiceImpl.addProject(user, project);
-//            members.add(user);
-//        }
-//        project.setMembers(members);
-//        return projectRepo.save(project);
-//    }
-
-    public Optional<Project> getProject(long projectId)
+    public Project getProject(long projectId)
     {
-        return projectRepo.findById(projectId);
-    }
-
-    @Transactional
-    public ResponseEntity<?> addTags(Project project, List<Tag> tags)
-    {
-        Set<Tag> currentTags = new HashSet<>(project.getTags());
-        currentTags.addAll(tags);
-        for(Tag tag:tags)
+        Optional<Project> project = projectRepo.findById(projectId);
+        if(project.isPresent())
         {
-            tag.getRelatedProjects().add(project);
-        }
-        project.setTags(new ArrayList<>(currentTags));
-        return ResponseEntity.ok("tags added successfully");
-    }
-
-    public ResponseEntity<?> createTag(String tagName)
-    {
-        if(tagRepo.getByName(tagName).isEmpty())
-        {
-            Tag newTag = new Tag(tagName);
-            tagRepo.save(newTag);
-            return ResponseEntity.ok("tag creates successfully");
+            return project.get();
         }
         else
         {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("tag name already exist");
+            throw new EntityNotFoundException("project not found");
         }
     }
+
+    public boolean isAuthorizedForProject(long projectId)
+    {
+        Project project = getProject(projectId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = (AppUser) authentication.getPrincipal();
+        return project.getOwner().getUsername().equals(appUser.getUsername());
+    }
+
+    public void updateProject(long projectId, Project updatedProject)
+    {
+        updatedProject.setId(projectId);
+        projectRepo.save(updatedProject);
+    }
+
+    public Project saveProject(Project project)
+    {
+        return projectRepo.save(project);
+    }
+//    @Transactional
+//    public ResponseEntity<?> addSkills(Project project, List<Skill> skills)
+//    {
+//        Set<Skill> currentSkills = new HashSet<>(project.getSkills());
+//        currentSkills.addAll(skills);
+//        for(Skill skill : skills)
+//        {
+//            skill.getRelatedProjects().add(project);
+//        }
+//        project.setSkills(new ArrayList<>(currentSkills));
+//        return ResponseEntity.ok("skills added successfully");
+//    }
+//
+//    public ResponseEntity<?> createSkill(String skillName)
+//    {
+//        if(skillRepo.getByName(skillName).isEmpty())
+//        {
+//            Skill newSkill = new Skill(skillName);
+//            skillRepo.save(newSkill);
+//            return ResponseEntity.ok("skill creates successfully");
+//        }
+//        else
+//        {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body("skill name already exist");
+//        }
+//    }
 }
