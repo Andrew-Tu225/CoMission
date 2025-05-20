@@ -66,6 +66,7 @@ public class AuthServiceImpl implements AuthService {
                 user.setPassword(encodedPassword);
                 user.setUser(true);
                 newUser=user;
+                break;
 
             default:
                 throw new IllegalArgumentException("Invalid register type: " + registerType);
