@@ -6,6 +6,7 @@ import com.comission.comission.client.Client;
 import com.comission.comission.common.AppUser;
 import com.comission.comission.skill.Skill;
 import com.comission.comission.skill.SkillRepository;
+import com.comission.comission.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -87,5 +88,20 @@ public class ProjectService {
         }
         project.setSkills(new ArrayList<>(currentSkills));
         return ResponseEntity.ok("skills added successfully");
+    }
+
+    public Project addUserToProject(Project project, User user)
+    {
+        if (!isAuthorizedForProject(project.getId())) {
+            throw new IllegalStateException("You don't have credentials to modify this project");
+        }
+
+        if (project.getFreelancer() != null) {
+            throw new IllegalStateException("User already exists in this project");
+        }
+
+        project.setFreelancer(user);
+        projectRepo.save(project);
+        return project;
     }
 }
