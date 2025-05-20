@@ -3,6 +3,7 @@ package com.comission.comission.client;
 import com.comission.comission.common.AppUser;
 import com.comission.comission.project.Project;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name="clients")
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Client extends AppUser {
     private String businessName;
 
